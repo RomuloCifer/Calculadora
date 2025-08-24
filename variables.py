@@ -3,3 +3,16 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).parent
 FILES_DIR = ROOT_DIR / 'files'
 WINDOW_ICON_PATH = FILES_DIR / 'calcicon.png'
+
+
+#tamanhos
+BIG_FONT_SIZE = 35
+MEDIUM_FONT_SIZE = 25
+SMALL_FONT_SIZE = 15
+
+TEXT_MARGIN = 15
+MINIMUM_WIDTH = 500
+
+DARKER_PRIMARY_COLOR = "#093c5e"
+DARKEST_PRIMARY_COLOR = "#032033"
+PRIMARY_COLOR = "#0c507e"

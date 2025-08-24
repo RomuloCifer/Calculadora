@@ -1,23 +1,39 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel
-from main_window import MainWindow
 import sys
+ 
+from buttons import Button
+from components import Display, Info, MainWindow
 from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QApplication
+from styles import setupTheme
 from variables import WINDOW_ICON_PATH
-
-
+ 
 if __name__ == '__main__':
-    #cria
+    # Cria a aplicação
     app = QApplication(sys.argv)
+    setupTheme(app)
     window = MainWindow()
-    #cria
-    #icone#
+ 
+    # Define o ícone
     icon = QIcon(str(WINDOW_ICON_PATH))
     window.setWindowIcon(icon)
     app.setWindowIcon(icon)
-    #icone
-
-    #tela
-    window.show()
-    #exec
-    app.exec()
  
+    # Info
+    info = Info('Sua conta')
+    window.addToVLayout(info)
+ 
+    # Display
+    display = Display()
+    window.addToVLayout(display)
+    # Display
+    button = Button('oi')
+    window.addToVLayout(button)
+
+    # Grid
+    # buttonsGrid = ButtonsGrid(display, info, window)
+    # window.verticalLayout.addLayout(buttonsGrid)
+
+    # Executa tudo
+ 
+    window.show()
+    app.exec()
