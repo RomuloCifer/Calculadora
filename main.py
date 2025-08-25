@@ -1,6 +1,6 @@
 import sys
  
-from buttons import Button
+from buttons import Button, ButtonsGrid
 from components import Display, Info, MainWindow
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
@@ -20,18 +20,15 @@ if __name__ == '__main__':
  
     # Info
     info = Info('Sua conta')
-    window.addToVLayout(info)
+    window.addWidgetToVLayout(info)
  
     # Display
     display = Display()
-    window.addToVLayout(display)
-    # Display
-    button = Button('oi')
-    window.addToVLayout(button)
-
+    window.addWidgetToVLayout(display)
+    
     # Grid
-    # buttonsGrid = ButtonsGrid(display, info, window)
-    # window.verticalLayout.addLayout(buttonsGrid)
+    buttonsGrid = ButtonsGrid()
+    window.verticalLayout.addLayout(buttonsGrid)
 
     # Executa tudo
  

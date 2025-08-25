@@ -12,9 +12,8 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.centralWidg)
         self.setWindowTitle("Calculadora")
 
-    def addToVLayout(self, widget: QWidget):
+    def addWidgetToVLayout(self, widget: QWidget):
         self.verticalLayout.addWidget(widget)
-
         self.adjustSize()
 
 
