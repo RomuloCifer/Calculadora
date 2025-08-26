@@ -1,6 +1,6 @@
 import sys
  
-from buttons import Button, ButtonsGrid
+from buttons import ButtonsGrid
 from components import Display, Info, MainWindow
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     window.addWidgetToVLayout(display)
     
     # Grid
-    buttonsGrid = ButtonsGrid()
+    buttonsGrid = ButtonsGrid(display)
     window.verticalLayout.addLayout(buttonsGrid)
 
     # Executa tudo

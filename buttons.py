@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QPushButton, QGridLayout
+from PySide6.QtWidgets import QPushButton, QGridLayout, QWidget
 from variables import MEDIUM_FONT_SIZE
 from utils import isNumOrDot, isEmpty
 
@@ -15,9 +15,9 @@ class Button(QPushButton):
 
 
 class ButtonsGrid(QGridLayout):
-    def __init__(self,*args,**kwargs):
+    def __init__(self, display: QWidget, *args,**kwargs):
         super().__init__(*args,**kwargs)
-
+        self.display = display
         self._gridArray = [
             ['C', '<', '^', '/'],
             ['7', '8', '9', '*'],
@@ -30,7 +30,20 @@ class ButtonsGrid(QGridLayout):
     def _createGrid(self):
         for i, row in enumerate(self._gridArray):
             for j, text in enumerate(row):
-                text = Button(text)
-                if not isNumOrDot(text.text()) and not isEmpty(text.text()):
-                    text.setProperty('specialButton', True)
-                self.addWidget(text, i, j)
+                button = Button(text)
+                if not isNumOrDot(button.text()) and not isEmpty(button.text()):
+                    button.setProperty('specialButton', True)
+                self.addWidget(button, i, j)
+                buttonSlot = self._makeButtonConnection(self.insertButtonToDisplay, button)
+                button.clicked.connect(buttonSlot)
+
+    def _makeButtonConnection(self, func, button):
+        def handler():
+            func(button)
+        return handler
+
+
+    def insertButtonToDisplay(self, button):
+        self.display.insert(button.text())
+        print(button.text())
+
