@@ -3,6 +3,7 @@ from PySide6.QtCore import Slot
 from variables import MEDIUM_FONT_SIZE
 from utils import isNumOrDot, isEmpty, isValidNumber
 from typing import TYPE_CHECKING
+import math
 if TYPE_CHECKING:
     from main import Display, Info
 
@@ -68,7 +69,7 @@ class ButtonsGrid(QGridLayout):
         if text == 'C':
             slot = self._makeSlot(self._clearDisplay)
             self._connectButtonClicked(button, slot)
-        if text in '+-/*':
+        if text in '+-/*^':
             self._connectButtonClicked(
                 button,
                 self._makeSlot(self._operatorClicked, button)
@@ -110,19 +111,33 @@ class ButtonsGrid(QGridLayout):
             return
         self._right = float(displayText)
         self.equation = f'{self._left} {self._operator} {self._right}'
+        result = 'error'
         try:
-            result = eval(self.equation)
-            self.display.setText(str(result))
-            self.info.setText(f'{self.equation} = {result}')
-            self._left = result
-            self._right = None
-            self._operator = None
+            if '^' in self.equation and isinstance(self._left, float):
+                result = math.pow(self._left, self._right)
 
+            else:
+                result = eval(self.equation)
         except ZeroDivisionError:
             self.display.setText('Erro: Divisão por zero')
-        except Exception as e:
-            self.display.setText(f'Erro: {e}')
+        except OverflowError:
+            print('numero muito grande')
         self.display.clear()
+        self.info.setText(f'{self.equation} = {result}')
+
+        if result == 'error':
+            self._left = None
+        self._left = result
+        self._right = None
+        self._operator = None
+
+        if result == 'error':
+            self._left = None
+
+
+
+        self.display.clear()
+
 
 
 
