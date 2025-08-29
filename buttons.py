@@ -2,11 +2,12 @@ from PySide6.QtWidgets import QPushButton, QGridLayout, QWidget
 from PySide6.QtCore import Slot
 from variables import MEDIUM_FONT_SIZE
 from utils import isNumOrDot, isEmpty, isValidNumber
-from typing import TYPE_CHECKING
 import math
+from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from main import Display, Info
-
+    from components import MainWindow
+#ANOTAR ISSO
 
 class Button(QPushButton):
     def __init__(self,*args,**kwargs):
@@ -22,17 +23,18 @@ class Button(QPushButton):
 
 
 class ButtonsGrid(QGridLayout):
-    def __init__(self, display: 'Display',info: 'Info', *args,**kwargs):
+    def __init__(self, display: 'Display',info: 'Info', window: 'MainWindow', *args,**kwargs):
         super().__init__(*args,**kwargs)
         self.display = display
         self.info = info
+        self.window = window
         self._equation = ''
         self._left = None
         self._right = None
         self._operator = None
         self._initial_equation = 'Sua conta'
         self._gridArray = [
-            ['C', '<', '^', '/'],
+            ['C', '⌫', '^', '/'],
             ['7', '8', '9', '*'],
             ['4', '5', '6', '-'],
             ['1', '2', '3', '+'],
@@ -69,6 +71,8 @@ class ButtonsGrid(QGridLayout):
         if text == 'C':
             slot = self._makeSlot(self._clearDisplay)
             self._connectButtonClicked(button, slot)
+        if text == '⌫':
+            self._connectButtonClicked(button, self.display.backspace)
         if text in '+-/*^':
             self._connectButtonClicked(
                 button,
@@ -98,7 +102,7 @@ class ButtonsGrid(QGridLayout):
         self.display.clear()
 
         if not isValidNumber(displayText) and self._left is None:
-            print('nao fiz nada')
+            self._showError('Erro: Número inválido')
             return
         if self._left is None:
             self._left = float(displayText)
@@ -119,9 +123,10 @@ class ButtonsGrid(QGridLayout):
             else:
                 result = eval(self.equation)
         except ZeroDivisionError:
-            self.display.setText('Erro: Divisão por zero')
+            self._showError('Erro: Divisão por zero')
+
         except OverflowError:
-            print('numero muito grande')
+            self._showError('Erro: Número muito grande')
         self.display.clear()
         self.info.setText(f'{self.equation} = {result}')
 
@@ -134,11 +139,14 @@ class ButtonsGrid(QGridLayout):
         if result == 'error':
             self._left = None
 
-
-
         self.display.clear()
 
 
+    def _showError(self,text):
+        msgBox = self.window.makeMsgBox()
+        msgBox.setText(text)
+        msgBox.setIcon(msgBox.Icon.Critical)
+        msgBox.exec()
 
 
     def insertButtonToDisplay(self, button):

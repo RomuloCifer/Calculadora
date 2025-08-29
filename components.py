@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QLineEdit, QLabel, QWidget, QMainWindow, QWidget, QVBoxLayout
+from PySide6.QtWidgets import QLineEdit, QLabel, QWidget, QMainWindow, QWidget, QVBoxLayout, QMessageBox
 from variables import *
 from PySide6.QtCore import Qt
 
@@ -21,6 +21,8 @@ class MainWindow(QMainWindow):
         self.adjustSize()
         self.setFixedSize(self.size())
         ###
+    def makeMsgBox(self):
+        return QMessageBox(self)
 
 class Display(QLineEdit):
     def __init__(self,*args,**kwargs):
